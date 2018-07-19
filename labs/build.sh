@@ -14,4 +14,5 @@ PHPSRC=`dirname "$ROOT"`
 cd "$PHPSRC" && \
 ./buildconf --force && \
 ./configure --prefix=$ROOT/local --disable-all --enable-maintainer-zts --enable-debug && \
-make
+make && \
+make install
