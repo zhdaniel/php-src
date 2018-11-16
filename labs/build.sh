@@ -5,14 +5,22 @@
 #
 
 ROOT=$(cd "$(dirname $0)"; pwd)
-if [ ! -d $ROOT/local ]; then
-    mkdir $ROOT/local
+if [ -d $ROOT/local ]; then
+    rm -rf $ROOT/local
 fi
+mkdir $ROOT/local
 
 PHPSRC=`dirname "$ROOT"`
+TS=${TS:=0}
+
+OPTS="--prefix=$ROOT/local --disable-all --enable-debug"
+if [ 1 -eq $TS ]; then
+    OPTS="$OPTS --enable-maintainer-zts"
+fi
 
 cd "$PHPSRC" && \
-./buildconf --force && \
-./configure --prefix=$ROOT/local --disable-all --enable-maintainer-zts --enable-debug && \
-make && \
-make install
+    make clean && \
+    ./buildconf --force && \
+    ./configure $OPTS && \
+    make && \
+    make install

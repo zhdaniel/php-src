@@ -3,12 +3,16 @@ CXX=/Users/zhangze02/local/clang/bin/clang++
 CC=/usr/bin/gcc
 CXX=/usr/bin/g++
 
-PHP_SRC=$(shell dirname ${CURDIR})
-
+PHP_SRC=$(abspath ${CURDIR}/../..)
 INCFLAGS=-I$(PHP_SRC)/TSRM -I$(PHP_SRC)/Zend -I$(PHP_SRC)/main -I$(PHP_SRC)
 LDFLAGS=-ldl -lm -lpthread
-DEFS=-DZTS=1 -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1
 DEBUG=-g3 -O0
+
+ifeq ($(ZTS), 1)
+	DEFS = -DZTS=1 -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1
+else
+	DEFS =
+endif
 
 ZEND_SRCS=$(PHP_SRC)/TSRM/TSRM.c \
 		$(PHP_SRC)/Zend/zend_alloc.c \
@@ -68,4 +72,4 @@ all:
 
 clean:
 	@echo Cleaning ...
-	@rm -rf *.i *.o *.s *.bc main main.dSYM
+	@rm -rf *.i *.o *.s *.bc main *.dSYM

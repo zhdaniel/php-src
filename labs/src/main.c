@@ -16,8 +16,8 @@ int main(int argc, char* argv[])
     tsrm_startup(1, 1, 0, NULL);
     (void)ts_resource(0);
     ZEND_TSRMLS_CACHE_UPDATE();
-
 #endif
+
     start_memory_manager();
 
     //int *mem = (int*)emalloc(sizeof(int));
