@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "stdarg.h": "c",
+        "zend_variables.h": "c",
+        "new": "cpp",
+        "initializer_list": "cpp",
+        "typeinfo": "cpp"
+    },
+    "debug.console.fontFamily": "Monaco"
+}

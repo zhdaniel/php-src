@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
     //int *mem = (int*)emalloc(sizeof(int));
     //*mem = 10;
 
-    //char data[] = "Hello, World\n";
+    char data[] = "Hello, World\n";
     //zend_string *s = zend_string_init(data, sizeof(data), 0);
     //printf("===A===\n");
     //for (int i = 0; i < s->len; i++) {
@@ -34,17 +34,17 @@ int main(int argc, char* argv[])
     //zend_string *copy = zend_string_copy(new_s);
     //printf("ref count: %d\n", (copy->gc).refcount);
 
-    //zend_stack stack;
-    //zend_stack_init(&stack, 64);
-    //int num = 10;
-    //zend_stack_push(&stack, &num);
-    //zend_stack_push(&stack, data);
-    //zend_stack_apply(&stack, 1, iter_func);
+    zend_stack stack;
+    zend_stack_init(&stack, 64);
+    int num = 10;
+    zend_stack_push(&stack, &num);
+    zend_stack_push(&stack, data);
+    zend_stack_apply(&stack, 1, iter_func);
 
     HashTable ht;
     zend_hash_init(&ht, 10, NULL, NULL, 0);
 
-    zval data;
+    zval zdata;
     zend_value value;
 
     const char key[] = "name0";
@@ -54,12 +54,12 @@ int main(int argc, char* argv[])
 
     zend_string *name = zend_string_init("daniel", sizeof("daniel"), 0);
     value.str = name;
-    data.value = value;
-    Z_TYPE_INFO(data) = IS_STRING;
+    zdata.value = value;
+    Z_TYPE_INFO(zdata) = IS_STRING;
 
-    zend_hash_add(&ht, str1, &data);
-    zend_hash_add(&ht, str2, &data);
-    //zend_hash_add(&ht, str3, &data);
+    zend_hash_add(&ht, str1, &zdata);
+    zend_hash_add(&ht, str2, &zdata);
+    //zend_hash_add(&ht, str3, &zdata);
 
     zval *result = zend_hash_find(&ht, str1);
     if (NULL != result) {

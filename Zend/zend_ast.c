@@ -28,6 +28,112 @@
 
 ZEND_API zend_ast_process_t zend_ast_process = NULL;
 
+#define stringify(kind) printf("[LINE: %03d, FUNC: %s] KIND: %s\n", __LINE__, __func__, kind_name(kind))
+
+static inline const char *kind_name(zend_ast_kind kind) {
+	switch(kind) {
+		case ZEND_AST_ZVAL              : return "ZEND_AST_ZVAL";
+		case ZEND_AST_ZNODE             : return "ZEND_AST_ZNODE";
+		case ZEND_AST_FUNC_DECL         : return "ZEND_AST_FUNC_DECL";
+		case ZEND_AST_CLOSURE           : return "ZEND_AST_CLOSURE";
+		case ZEND_AST_METHOD            : return "ZEND_AST_METHOD";
+		case ZEND_AST_CLASS             : return "ZEND_AST_CLASS";
+		case ZEND_AST_ARG_LIST          : return "ZEND_AST_ARG_LIST";
+		case ZEND_AST_ARRAY             : return "ZEND_AST_ARRAY";
+		case ZEND_AST_ENCAPS_LIST       : return "ZEND_AST_ENCAPS_LIST";
+		case ZEND_AST_EXPR_LIST         : return "ZEND_AST_EXPR_LIST";
+		case ZEND_AST_STMT_LIST         : return "ZEND_AST_STMT_LIST";
+		case ZEND_AST_IF                : return "ZEND_AST_IF";
+		case ZEND_AST_SWITCH_LIST       : return "ZEND_AST_SWITCH_LIST";
+		case ZEND_AST_CATCH_LIST        : return "ZEND_AST_CATCH_LIST";
+		case ZEND_AST_PARAM_LIST        : return "ZEND_AST_PARAM_LIST";
+		case ZEND_AST_CLOSURE_USES      : return "ZEND_AST_CLOSURE_USES";
+		case ZEND_AST_PROP_DECL         : return "ZEND_AST_PROP_DECL";
+		case ZEND_AST_CONST_DECL        : return "ZEND_AST_CONST_DECL";
+		case ZEND_AST_CLASS_CONST_DECL  : return "ZEND_AST_CLASS_CONST_DECL";
+		case ZEND_AST_NAME_LIST         : return "ZEND_AST_NAME_LIST";
+		case ZEND_AST_TRAIT_ADAPTATIONS : return "ZEND_AST_TRAIT_ADAPTATIONS";
+		case ZEND_AST_USE               : return "ZEND_AST_USE";
+		case ZEND_AST_MAGIC_CONST       : return "ZEND_AST_MAGIC_CONST";
+		case ZEND_AST_TYPE              : return "ZEND_AST_TYPE";
+		case ZEND_AST_VAR               : return "ZEND_AST_VAR";
+		case ZEND_AST_CONST             : return "ZEND_AST_CONST";
+		case ZEND_AST_UNPACK            : return "ZEND_AST_UNPACK";
+		case ZEND_AST_UNARY_PLUS        : return "ZEND_AST_UNARY_PLUS";
+		case ZEND_AST_UNARY_MINUS       : return "ZEND_AST_UNARY_MINUS";
+		case ZEND_AST_CAST              : return "ZEND_AST_CAST";
+		case ZEND_AST_EMPTY             : return "ZEND_AST_EMPTY";
+		case ZEND_AST_ISSET             : return "ZEND_AST_ISSET";
+		case ZEND_AST_SILENCE           : return "ZEND_AST_SILENCE";
+		case ZEND_AST_SHELL_EXEC        : return "ZEND_AST_SHELL_EXEC";
+		case ZEND_AST_CLONE             : return "ZEND_AST_CLONE";
+		case ZEND_AST_EXIT              : return "ZEND_AST_EXIT";
+		case ZEND_AST_PRINT             : return "ZEND_AST_PRINT";
+		case ZEND_AST_INCLUDE_OR_EVAL   : return "ZEND_AST_INCLUDE_OR_EVAL";
+		case ZEND_AST_UNARY_OP          : return "ZEND_AST_UNARY_OP";
+		case ZEND_AST_PRE_INC           : return "ZEND_AST_PRE_INC";
+		case ZEND_AST_PRE_DEC           : return "ZEND_AST_PRE_DEC";
+		case ZEND_AST_POST_INC          : return "ZEND_AST_POST_INC";
+		case ZEND_AST_POST_DEC          : return "ZEND_AST_POST_DEC";
+		case ZEND_AST_YIELD_FROM        : return "ZEND_AST_YIELD_FROM";
+		case ZEND_AST_GLOBAL            : return "ZEND_AST_GLOBAL";
+		case ZEND_AST_UNSET             : return "ZEND_AST_UNSET";
+		case ZEND_AST_RETURN            : return "ZEND_AST_RETURN";
+		case ZEND_AST_LABEL             : return "ZEND_AST_LABEL";
+		case ZEND_AST_REF               : return "ZEND_AST_REF";
+		case ZEND_AST_HALT_COMPILER     : return "ZEND_AST_HALT_COMPILER";
+		case ZEND_AST_ECHO              : return "ZEND_AST_ECHO";
+		case ZEND_AST_THROW             : return "ZEND_AST_THROW";
+		case ZEND_AST_GOTO              : return "ZEND_AST_GOTO";
+		case ZEND_AST_BREAK             : return "ZEND_AST_BREAK";
+		case ZEND_AST_CONTINUE          : return "ZEND_AST_CONTINUE";
+		case ZEND_AST_DIM               : return "ZEND_AST_DIM";
+		case ZEND_AST_PROP              : return "ZEND_AST_PROP";
+		case ZEND_AST_STATIC_PROP       : return "ZEND_AST_STATIC_PROP";
+		case ZEND_AST_CALL              : return "ZEND_AST_CALL";
+		case ZEND_AST_CLASS_CONST       : return "ZEND_AST_CLASS_CONST";
+		case ZEND_AST_ASSIGN            : return "ZEND_AST_ASSIGN";
+		case ZEND_AST_ASSIGN_REF        : return "ZEND_AST_ASSIGN_REF";
+		case ZEND_AST_ASSIGN_OP         : return "ZEND_AST_ASSIGN_OP";
+		case ZEND_AST_BINARY_OP         : return "ZEND_AST_BINARY_OP";
+		case ZEND_AST_GREATER           : return "ZEND_AST_GREATER";
+		case ZEND_AST_GREATER_EQUAL     : return "ZEND_AST_GREATER_EQUAL";
+		case ZEND_AST_AND               : return "ZEND_AST_AND";
+		case ZEND_AST_OR                : return "ZEND_AST_OR";
+		case ZEND_AST_ARRAY_ELEM        : return "ZEND_AST_ARRAY_ELEM";
+		case ZEND_AST_NEW               : return "ZEND_AST_NEW";
+		case ZEND_AST_INSTANCEOF        : return "ZEND_AST_INSTANCEOF";
+		case ZEND_AST_YIELD             : return "ZEND_AST_YIELD";
+		case ZEND_AST_COALESCE          : return "ZEND_AST_COALESCE";
+		case ZEND_AST_STATIC            : return "ZEND_AST_STATIC";
+		case ZEND_AST_WHILE             : return "ZEND_AST_WHILE";
+		case ZEND_AST_DO_WHILE          : return "ZEND_AST_DO_WHILE";
+		case ZEND_AST_IF_ELEM           : return "ZEND_AST_IF_ELEM";
+		case ZEND_AST_SWITCH            : return "ZEND_AST_SWITCH";
+		case ZEND_AST_SWITCH_CASE       : return "ZEND_AST_SWITCH_CASE";
+		case ZEND_AST_DECLARE           : return "ZEND_AST_DECLARE";
+		case ZEND_AST_USE_TRAIT         : return "ZEND_AST_USE_TRAIT";
+		case ZEND_AST_TRAIT_PRECEDENCE  : return "ZEND_AST_TRAIT_PRECEDENCE";
+		case ZEND_AST_METHOD_REFERENCE  : return "ZEND_AST_METHOD_REFERENCE";
+		case ZEND_AST_NAMESPACE         : return "ZEND_AST_NAMESPACE";
+		case ZEND_AST_USE_ELEM          : return "ZEND_AST_USE_ELEM";
+		case ZEND_AST_TRAIT_ALIAS       : return "ZEND_AST_TRAIT_ALIAS";
+		case ZEND_AST_GROUP_USE         : return "ZEND_AST_GROUP_USE";
+		case ZEND_AST_METHOD_CALL       : return "ZEND_AST_METHOD_CALL";
+		case ZEND_AST_STATIC_CALL       : return "ZEND_AST_STATIC_CALL";
+		case ZEND_AST_CONDITIONAL       : return "ZEND_AST_CONDITIONAL";
+		case ZEND_AST_TRY               : return "ZEND_AST_TRY";
+		case ZEND_AST_CATCH             : return "ZEND_AST_CATCH";
+		case ZEND_AST_PARAM             : return "ZEND_AST_PARAM";
+		case ZEND_AST_PROP_ELEM         : return "ZEND_AST_PROP_ELEM";
+		case ZEND_AST_CONST_ELEM        : return "ZEND_AST_CONST_ELEM";
+		case ZEND_AST_FOR               : return "ZEND_AST_FOR";
+		case ZEND_AST_FOREACH           : return "ZEND_AST_FOREACH";
+	}
+
+	return NULL;
+}
+
 static inline void *zend_ast_alloc(size_t size) {
 	return zend_arena_alloc(&CG(ast_arena), size);
 }
@@ -49,6 +155,8 @@ static inline size_t zend_ast_list_size(uint32_t children) {
 ZEND_API zend_ast *zend_ast_create_znode(znode *node) {
 	zend_ast_znode *ast;
 
+	stringify(ZEND_AST_ZNODE);
+
 	ast = zend_ast_alloc(sizeof(zend_ast_znode));
 	ast->kind = ZEND_AST_ZNODE;
 	ast->attr = 0;
@@ -59,6 +167,8 @@ ZEND_API zend_ast *zend_ast_create_znode(znode *node) {
 
 ZEND_API zend_ast *zend_ast_create_zval_with_lineno(zval *zv, zend_ast_attr attr, uint32_t lineno) {
 	zend_ast_zval *ast;
+
+	stringify(ZEND_AST_ZVAL);
 
 	ast = zend_ast_alloc(sizeof(zend_ast_zval));
 	ast->kind = ZEND_AST_ZVAL;
@@ -77,6 +187,8 @@ ZEND_API zend_ast *zend_ast_create_decl(
 	zend_string *name, zend_ast *child0, zend_ast *child1, zend_ast *child2, zend_ast *child3
 ) {
 	zend_ast_decl *ast;
+
+	stringify(kind);
 
 	ast = zend_ast_alloc(sizeof(zend_ast_decl));
 	ast->kind = kind;
@@ -98,6 +210,8 @@ ZEND_API zend_ast *zend_ast_create_decl(
 static zend_ast *zend_ast_create_from_va_list(zend_ast_kind kind, zend_ast_attr attr, va_list va) {
 	uint32_t i, children = kind >> ZEND_AST_NUM_CHILDREN_SHIFT;
 	zend_ast *ast;
+
+	stringify(kind);
 
 	ast = zend_ast_alloc(zend_ast_size(children));
 	ast->kind = kind;
@@ -125,6 +239,8 @@ ZEND_API zend_ast *zend_ast_create_ex(zend_ast_kind kind, zend_ast_attr attr, ..
 	va_list va;
 	zend_ast *ast;
 
+	stringify(kind);
+
 	va_start(va, attr);
 	ast = zend_ast_create_from_va_list(kind, attr, va);
 	va_end(va);
@@ -135,6 +251,8 @@ ZEND_API zend_ast *zend_ast_create_ex(zend_ast_kind kind, zend_ast_attr attr, ..
 ZEND_API zend_ast *zend_ast_create(zend_ast_kind kind, ...) {
 	va_list va;
 	zend_ast *ast;
+
+	stringify(kind);
 
 	va_start(va, kind);
 	ast = zend_ast_create_from_va_list(kind, 0, va);
@@ -153,6 +271,8 @@ ZEND_API zend_ast *zend_ast_create_list(uint32_t init_children, zend_ast_kind ki
 	list->attr = 0;
 	list->lineno = CG(zend_lineno);
 	list->children = 0;
+
+	stringify(kind);
 
 	{
 		va_list va;
@@ -232,6 +352,8 @@ ZEND_API int zend_ast_evaluate(zval *result, zend_ast *ast, zend_class_entry *sc
 {
 	zval op1, op2;
 	int ret = SUCCESS;
+
+	stringify(ast->kind);
 
 	switch (ast->kind) {
 		case ZEND_AST_BINARY_OP:

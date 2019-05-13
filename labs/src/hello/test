@@ -1,0 +1,18 @@
+#!/bin/sh
+
+ROOT=$(cd "`dirname $0`"; pwd)
+PHP_HOME=../../local
+PHP=$PHP_HOME/bin/php
+
+cd $ROOT
+
+if [ ! -e configure ]; then
+    $PHP_HOME/bin/phpize
+fi
+
+if [ ! -e modules/hello.so ]; then
+    ./configure --with-php-config=$PHP_HOME/bin/php-config --enable-hello && make
+else
+    $PHP -dextension=modules/hello.so hello.php
+fi
+

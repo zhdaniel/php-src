@@ -324,15 +324,33 @@ static const uint32_t bin_data_size[] = {
   ZEND_MM_BINS_INFO(_BIN_DATA_SIZE, x, y)
 };
 
+// static const uint32_t bin_data_size[] = {
+//   8,   16,  24,   32,   40,   48,   56,   64,   80,  96,
+//   112, 128, 160,  192,  224,  256,  320,  384,  448, 512,
+//   640, 768, 896, 1024, 1280, 1536, 1792, 2048, 2560, 3072,
+// };
+
 #define _BIN_DATA_ELEMENTS(num, size, elements, pages, x, y) elements,
 static const uint32_t bin_elements[] = {
   ZEND_MM_BINS_INFO(_BIN_DATA_ELEMENTS, x, y)
 };
 
+// static const uint32_t bin_elements[] = {
+//   512, 256, 170, 128, 102, 85, 73, 64, 51, 42,
+//   36,  32,  25,  21,  18,  16, 64, 32, 9,  8,
+//   32,  16,  9,   8,   16,  8,  16, 8,  8,  4,
+// };
+
 #define _BIN_DATA_PAGES(num, size, elements, pages, x, y) pages,
 static const uint32_t bin_pages[] = {
   ZEND_MM_BINS_INFO(_BIN_DATA_PAGES, x, y)
 };
+
+// static const uint32_t bin_pages[] = {
+//   1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//   1, 1, 1, 1, 1, 1, 5, 3, 1, 1,
+//   5, 3, 2, 2, 5, 3, 7, 4, 5, 3,
+// };
 
 #if ZEND_DEBUG
 ZEND_COLD void zend_debug_alloc_output(char *format, ...)

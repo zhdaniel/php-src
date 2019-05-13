@@ -26,9 +26,10 @@ typedef struct _tsrm_tls_entry tsrm_tls_entry;
 /* TSRMLS_CACHE_DEFINE; is already done in Zend, this is being always compiled statically. */
 #endif
 
+// 代表一个线程中包含的资源
 struct _tsrm_tls_entry {
-	void **storage;
-	int count;
+	void **storage; // the array of resources pointer in current thread
+	int count;      // the number of resources in current thread
 	THREAD_T thread_id;
 	tsrm_tls_entry *next;
 };
@@ -246,17 +247,17 @@ TSRM_API ts_rsrc_id ts_allocate_id(ts_rsrc_id *rsrc_id, size_t size, ts_allocate
 
 	/* enlarge the arrays for the already active threads */
 	for (i=0; i<tsrm_tls_table_size; i++) {
-		tsrm_tls_entry *p = tsrm_tls_table[i];
+		tsrm_tls_entry *p = tsrm_tls_table[i]; 
 
 		while (p) {
 			if (p->count < id_count) {
 				int j;
 
 				p->storage = (void *) realloc(p->storage, sizeof(void *)*id_count);
-				for (j=p->count; j<id_count; j++) {
-					p->storage[j] = (void *) malloc(resource_types_table[j].size);
+				for (j=p->count; j<id_count; j++) { // 初始化新分配的资源
+					p->storage[j] = (void *) malloc(resource_types_table[j].size); // 分配内存
 					if (resource_types_table[j].ctor) {
-						resource_types_table[j].ctor(p->storage[j]);
+						resource_types_table[j].ctor(p->storage[j]); // 初始化内存区域
 					}
 				}
 				p->count = id_count;

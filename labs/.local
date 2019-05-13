@@ -1,0 +1,25 @@
+file local/bin/php
+
+#b zend_mm_chunk_alloc
+#b zend_mm_startup
+#b zend_mm_alloc_small
+#b zend_mm_gc
+#b zend_mm_init
+#b get_binary_op
+
+#b tsrm_startup
+#b tsrm_shutdown
+#b ts_allocate_id
+#b allocate_new_resource
+#b ts_free_id
+#b sapi_startup
+#b zend_startup
+
+#b zend_zas_create
+b zendlex
+b zendparse
+b lex_scan
+b zend_execute
+
+r demo.php
+
