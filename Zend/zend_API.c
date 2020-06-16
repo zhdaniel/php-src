@@ -829,17 +829,17 @@ static int zend_parse_va_args(int num_args, const char *type_spec, va_list *va, 
 				max_num_args++;
 				break;
 
-			case '|':
+			case '|': // 标记可选参数
 				min_num_args = max_num_args;
 				break;
 
-			case '/':
-			case '!':
+			case '/': // 标记引用
+			case '!': // 检查NULL
 				/* Pass */
 				break;
 
-			case '*':
-			case '+':
+			case '*': // 标记零个或多个可变参数
+			case '+': // 标记一个或多个可变参数（至少有一个）
 				if (have_varargs) {
 					zend_parse_parameters_debug_error(
 						"only one varargs specifier (* or +) is permitted");
@@ -896,7 +896,7 @@ static int zend_parse_va_args(int num_args, const char *type_spec, va_list *va, 
 
 	i = 0;
 	while (num_args-- > 0) {
-		if (*type_spec == '|') {
+		if (*type_spec == '|') { // 表明参数类型在 | 之后
 			type_spec++;
 		}
 

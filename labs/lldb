@@ -1,0 +1,5 @@
+#!/bin/sh
+
+ROOT=$(cd "`dirname $0`/.."; pwd)
+
+sudo lldb $ROOT/labs/local/bin/php $@

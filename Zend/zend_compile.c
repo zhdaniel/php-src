@@ -5531,6 +5531,7 @@ static void zend_begin_func_decl(znode *result, zend_op_array *op_array, zend_as
 
 	unqualified_name = decl->name;
 	op_array->function_name = name = zend_prefix_with_ns(unqualified_name);
+	printf("%s.function_name: %s\n", __func__, op_array->function_name->val);
 	lcname = zend_string_tolower(name);
 
 	if (FC(imports_function)) {
@@ -5550,6 +5551,7 @@ static void zend_begin_func_decl(znode *result, zend_op_array *op_array, zend_as
 	}
 
 	key = zend_build_runtime_definition_key(lcname, decl->lex_pos);
+	printf("%s.zend_build_runtime_definition_key: %s\n", __func__, key->val);
 	zend_hash_update_ptr(CG(function_table), key, op_array);
 
 	if (op_array->fn_flags & ZEND_ACC_CLOSURE) {
